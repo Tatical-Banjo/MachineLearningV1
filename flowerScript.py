@@ -17,33 +17,38 @@ url = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/iris.csv"
 names = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'class']
 dataset = pandas.read_csv(url, names=names)
 
-#shape
-print("Shape of dataset:")
-print(dataset.shape)
+# #shape
+# print("Shape of dataset:")
+# print(dataset.shape)
 
 # head
 print("Dateset top 20 row contents:")
 print(dataset.head(20))
 	
-# descriptions
-print("Dateset description:")
-print(dataset.describe())
+# # descriptions
+# print("Dateset description:")
+# print(dataset.describe())
 	
 # class distribution
+print("")
 print("Dateset class distribution:")
 print(dataset.groupby('class').size())
 
 # # box and whisker plots
-# dataset.plot(kind='box', subplots=True, layout=(2,2), sharex=False, sharey=False)
-# plt.show()
+fig = plt.subplots( nrows=1, ncols=1 )
+dataset.plot(kind='box', subplots=True, layout=(2,2), sharex=False, sharey=False)
+plt.savefig('boxAndWiskers.png')
+plt.clf()
 	
 # histograms
-# dataset.hist()
-# plt.show()
+dataset.hist()
+plt.savefig('histograms.png')
+plt.clf()
 
 # Multivariate Plots
-# scatter_matrix(dataset)
-# plt.show()
+scatter_matrix(dataset)
+plt.savefig('MultivariatePlots.png')
+plt.clf()
 
 # split the loaded dataset into two, 80% of which we will use to train our models and 20% that we will hold back as a validation dataset.
 array = dataset.values
@@ -79,6 +84,7 @@ models.append(('SVM', SVC()))
 # evaluate each model in turn
 results = []
 names = []
+print("")
 for name, model in models:
 	kfold = model_selection.KFold(n_splits=10, random_state=seed)
 	cv_results = model_selection.cross_val_score(model, X_train, Y_train, cv=kfold, scoring=scoring)
@@ -93,7 +99,8 @@ fig.suptitle('Algorithm Comparison')
 ax = fig.add_subplot(111)
 plt.boxplot(results)
 ax.set_xticklabels(names)
-plt.show()
+plt.savefig('results.png')
+plt.clf()
 	
 # Make predictions on validation dataset
 knn = KNeighborsClassifier()
